@@ -57,11 +57,33 @@ public class TestUnorientedGraph {
   @Test
   public void testDepthFirstSearch() {
     UnorientedGraph gr = createTestGraph();
-    List<Integer> result = gr.depthFirstSearch(1);
     Integer[] expected = new Integer[] { 1, 2, 3, 4, 5 };
-    assertEquals(Arrays.asList(expected), result);
-    result = gr.depthFirstSearch(3);
+    assertEquals(Arrays.asList(expected), gr.depthFirstSearch(1));
+    assertEquals(Arrays.asList(expected), gr.recursiveDepthFirstSearch(1));
+    
     expected = new Integer[] { 3, 1, 2, 5, 4 };
+    assertEquals(Arrays.asList(expected), gr.depthFirstSearch(3));
+    assertEquals(Arrays.asList(expected), gr.recursiveDepthFirstSearch(3));
+  }
+
+  @Test
+  public void testBreadthFirstSearch() {
+    UnorientedGraph gr = createTestGraph();
+    List<Integer> result = gr.breadthFirstSearch(1);
+    Integer[] expected = new Integer[] { 1, 2, 3, 5, 4 };
     assertEquals(Arrays.asList(expected), result);
+
+    result = gr.breadthFirstSearch(3);
+    expected = new Integer[] { 3, 1, 4, 5, 2 };
+    assertEquals(Arrays.asList(expected), result);
+
+  }
+
+  @Test
+  public void testDistance() {
+    UnorientedGraph gr = createTestGraph();
+    assertEquals(0, gr.distance(1, 1));
+    assertEquals(1, gr.distance(1, 2));
+    assertEquals(2, gr.distance(1, 4));  
   }
 }

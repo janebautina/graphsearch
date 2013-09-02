@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.NavigableSet;
 import java.util.Stack;
@@ -81,5 +82,64 @@ public class UnorientedGraph {
       }
     }
     return list;
+  }
+  
+  private void traverse(int a, List<Integer> result, Set<Integer> visited) {
+    if (visited.contains(a)) {
+      return;
+    }
+    visited.add(a);
+    result.add(a);
+    for (int b: getNeighbors(a)) {
+      traverse(b, result, visited);
+    }
+  }
+  
+  public List<Integer> recursiveDepthFirstSearch(int a) {
+    List<Integer> list = new LinkedList<Integer>();
+    Set<Integer> visited = new HashSet<Integer>();
+    traverse(a, list, visited);
+    return list;
+  }
+  
+  public List<Integer> breadthFirstSearch(int a) {
+    List<Integer> list = new LinkedList<Integer>();
+    Queue<Integer> queue = new LinkedList<Integer>();
+    Set<Integer> visited = new HashSet<Integer>();
+    queue.add(a);
+    while (!queue.isEmpty()) {
+      int i = queue.poll();
+      if (visited.contains(i)) {
+        continue;
+      }
+      list.add(i);
+      visited.add(i);
+      for (int j: getNeighbors(i)) {
+        queue.add(j);
+      }
+    }
+    return list;
+  }
+  
+  public int distance(int a, int b) {
+    Queue<Pair<Integer, Integer>> queue = new LinkedList<Pair<Integer, Integer>>();
+    Set<Integer> visited = new HashSet<Integer>();
+    queue.add(Pair.createPair(a, 0));
+    while (!queue.isEmpty()) {
+      Pair<Integer, Integer> iAndDist = queue.poll();
+      int i = iAndDist.getElement0();
+      final int dist = iAndDist.getElement1();
+      if (visited.contains(i)) {
+        continue;
+      }
+      if (i == b) {
+        return dist;
+      }
+      visited.add(i);
+      for (int j: getNeighbors(i)) {
+        queue.add(Pair.createPair(j, dist + 1));
+      }
+    }
+    return -1;
   }
 }
